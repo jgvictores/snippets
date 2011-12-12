@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+Author: Santiago Morante
+CopyPolicy: Released under the terms of the LGPLv2.1 or later
+html/css Template by: http://www.freecsstemplates.org (Creative Commons Attribution 2.5 License)
+-->
+<head>
+<meta charset="UTF-8">
+<title>IP cam</title>
+
+<link href="style.css" rel="stylesheet" media="screen" />
+
+<script>
+function viewer() {
+    document.stream.src = document.getElementById("swapper").value;
+}
+</script>
+</head>
+<body>
+<div id="header">
+	<h1><a href="index.html">Proyect</a></h1>
+	<h2>By smor</h2>
+</div>
+<div id="menu">
+	<ul>
+		<li><a href="index.html" accesskey="1" title="">Home</a></li>
+		<li><a href="ipcam.html" accesskey="2" title="">IP cam</a></li>
+		<li><a href="speech.html" accesskey="3" title="">Speech recog</a></li>
+	</ul>
+</div>
+<!-- start content -->
+<div id="latest-post" class="post">
+<br>
+	<h1 class="title">IP cam viewer</h1> 
+
+Insert URL and click enter.
+<br><br>
+	URL:  <input type="text" id="swapper" style="width: 270px" onchange="viewer()">
+<br><br>
+		<img id="stream" src="url" alt="--Live video--">
+
+	<!-- end content -->
+</div>
+
+<div id="footer">
+	<p class="legal">Copyright (c) 2011 Santiago Morante</p>
+<p class="credit">Designed by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+</div>
+</body>
+</html>

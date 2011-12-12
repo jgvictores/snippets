@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+Author: Santiago Morante
+CopyPolicy: Released under the terms of the LGPLv2.1 or later
+html/css Template by: http://www.freecsstemplates.org (Creative Commons Attribution 2.5 License)
+-->
+<head>
+<meta charset="UTF-8">
+<title>Speech Recog</title>
+
+<link href="style.css" rel="stylesheet" media="screen" />
+<!-- Uncomment this script if you want to submit the answer:
+
+<script>
+	function submitform()
+		{
+   		document.forms["recognition"].submit();
+		}
+</script>-->
+
+</head>
+<body>
+<div id="header">
+	<h1><a href="index.html">Proyect</a></h1>
+	<h2>By smor</h2>
+</div>
+<div id="menu">
+	<ul>
+		<li><a href="index.html" accesskey="1" title="">Home</a></li>
+		<li><a href="ipcam.html" accesskey="2" title="">IP cam</a></li>
+		<li><a href="speech.html" accesskey="3" title="">Speech recog</a></li>
+	</ul>
+</div>
+<!-- start content -->
+<div id="latest-post" class="post">
+<br>
+	<h1 class="title">Speech Recog</h1> 
+
+Click microphone and speak.
+<br><br>
+
+			<form id="recognition" action="speech">
+				<input type='text' name='word' style="height: 25px; width: 340px;" x-webkit-speech onwebkitspeechchange="submitform()">
+			</form>
+	<!-- end content -->
+</div>
+
+<div id="footer">
+	<p class="legal">Copyright (c) 2011 Santiago Morante</p>
+<p class="credit">Designed by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+</div>
+</body>
+</html>
