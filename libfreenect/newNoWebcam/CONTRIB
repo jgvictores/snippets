@@ -1,0 +1,57 @@
+2011-03-07 Snapshot at: http://openkinect.org/wiki/People
+
+This page lists the people currently involved in the OpenKinect community and development effort. If you're starting a new project or working on a particular new feature, check here to make sure someone else isn't already working on it!
+
+= Community lead =
+Joshua Blake ([[User:JoshB|JoshB]]) is the OpenKinect community founder and lead. He is responsible for bringing together everyone interested in OpenKinect and tries to coordinate the project's efforts and the people who work on them. He also serves as a point-of-contact between the OpenKinect community and other projects, companies, and the general public.
+
+= Subprojects =
+
+== Administration ==
+This includes mailing list and PR efforts such as twitter and blogs.
+
+* Joshua Blake ([[User:JoshB|JoshB]])
+* Seth Sandler (cerupcat), assists with Google Group mailing list apps
+* Peter Finn (Nink), runs @openkinect on twitter
+* Hector Martin (marcan), runs the openkinect.org server and Wiki software
+
+== Regional Meetup Coordinators ==
+This includes people organizing events and meetups in cities around the world.
+
+* Sean Kean ([[User:Seankean|seankean]]) - [[http://www.meetup.com/OpenKinect NYC OpenKinect Meetup]]
+* Matt - [[http://www.meetup.com/3DVision/ San Francisco 3D Vision Meetup]]
+
+== Repo maintainers ==
+Repo Maintainers have commit access to the official repository and integrate pull requests and patches.
+
+* Kyle Machulis ([[User:Qdot|qDot]])
+* Hector Martin ([[User:Marcan|marcan]])
+* Joshua Blake ([[User:JoshB|JoshB]])
+
+== libfreenect ==
+libfreenect is the driver and API project that includes all code that communicates directly with the hardware for Linux, OS X, and Windows. The repository is located at https://github.com/OpenKinect/libfreenect/.
+
+* Hector Martin ([[User:Marcan|marcan]]) - original author and current maintainer
+* Kyle Machulis ([[User:Qdot|qDot]]) - integration, Git master, cmake maintainer, OS X maintainer, win32 something or other
+* Joshua Blake ([[User:JoshB|JoshB]]) - win32, C# wrapper
+* Brandyn White ([[User:Brandyn|Brandyn]]) - Python wrapper, C Synchronous Wrapper, Fakenect, Kinect Record Utility
+* Arne Bernin - debian/ubuntu packaging
+* Theo Watson (ofTheo) - ofxKinect: OpenFrameworks wrapper for libfreenect
+* stephanemagnenat - Working on ROS node which uses libfreenect, would like to push changes upstream. Our lab could help with calibration.
+* Drew Fisher ([[User:Zarvox|zarvox]]) - Working on camera protocol, audio protocol, reverse engineering, and documentation
+* zephod - Working on audio protocol and Win32 C++ 
+* Tully Foote (tfoote) - Working on ROS node https://github.com/ros-pkg-git/kinect and managing separate branch used for integration with the ROS bindings https://github.com/ros-pkg-git/libfreenect
+* Aditya Gaddam ([[User:LostInCake|LostInCake]]) - Cross platform C# wrapper. Helping with win32 library effort. Ruby Wrapper.
+* Scott Byrns (scottb) - Java wrapper
+* Juan Carlos del Valle (ekinox) - Action Script 3 server and API
+* Oscar Valdez (ozipi) - Actionscript 3 server and API
+* Mike Slinn (mslinn) - Action Script 3
+* Taha Bintahir - Processing
+* Mark Renouf (mrenouf/tweakt) - Ubuntu packaging https://launchpad.net/~mark-renouf/+archive/openkinect/
+* CADET - Working on skeleton segmentation library (2Real engine) http://www.cadet.at
+* Aaron Zinman - JavaScript via DepthJS
+* Doug Fritz  - JavaScript via DepthJS
+* Roy Shilkrot - JavaScript via DepthJS
+* Greg Elliott - JavaScript via DepthJS
+* Kai Ritterbusch(phen), C++ example & bugfixes
+* Marcos Slomp ([[User:Slomp|Slomp]]) - Win32 port (libusb-1.0 emulation layer)
