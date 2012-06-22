@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.6)
+ 
+PROJECT(OBBTree)
+ 
+FIND_PACKAGE(VTK REQUIRED)
+INCLUDE(${VTK_USE_FILE})
+ 
+ADD_EXECUTABLE(OBBTree main.cpp)
+TARGET_LINK_LIBRARIES(OBBTree vtkHybrid)
+
