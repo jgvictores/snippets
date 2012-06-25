@@ -1,3 +1,4 @@
+// -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:nil -*-
 
 #include <pcl/ModelCoefficients.h>
 #include <pcl/point_types.h>
@@ -30,169 +31,170 @@
 #include <vtkSphereSource.h>
 #include <vtkTransform.h>
 
-
 int main(int, char *[]) {
 
-  // Load input file into a PointCloud<T> with an appropriate type
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-  sensor_msgs::PointCloud2 cloud_blob;
-  pcl::io::loadPCDFile ("../arm.pcd", cloud_blob);
-  pcl::fromROSMsg (cloud_blob, *cloud);
-  //* the data should be available in cloud
+    // Load input file into a PointCloud<T> with an appropriate type
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    sensor_msgs::PointCloud2 cloud_blob;
+    pcl::io::loadPCDFile ("../arm.pcd", cloud_blob);
+    pcl::fromROSMsg (cloud_blob, *cloud);
+    //* the data should be available in cloud
 
-  // Normal estimation*
-  pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> n;
-  pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
-  tree->setInputCloud (cloud);
-  n.setInputCloud (cloud);
-  n.setSearchMethod (tree);
-  n.setKSearch (20);
-  n.compute (*normals);
-  //* normals should not contain the point normals + surface curvatures
+    // Normal estimation*
+    pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> n;
+    pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud<pcl::Normal>);
+    pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
+    tree->setInputCloud (cloud);
+    n.setInputCloud (cloud);
+    n.setSearchMethod (tree);
+    n.setKSearch (20);
+    n.compute (*normals);
+    //* normals should not contain the point normals + surface curvatures
 
-  // Concatenate the XYZ and normal fields*
-  pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals (new pcl::PointCloud<pcl::PointNormal>);
-  pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
-  //* cloud_with_normals = cloud + normals
+    // Concatenate the XYZ and normal fields*
+    pcl::PointCloud<pcl::PointNormal>::Ptr cloud_with_normals (new pcl::PointCloud<pcl::PointNormal>);
+    pcl::concatenateFields (*cloud, *normals, *cloud_with_normals);
+    //* cloud_with_normals = cloud + normals
 
-  // Create search tree*
-  pcl::search::KdTree<pcl::PointNormal>::Ptr tree2 (new pcl::search::KdTree<pcl::PointNormal>);
-  tree2->setInputCloud (cloud_with_normals);
+    // Create search tree*
+    pcl::search::KdTree<pcl::PointNormal>::Ptr tree2 (new pcl::search::KdTree<pcl::PointNormal>);
+    tree2->setInputCloud (cloud_with_normals);
 
-  // Initialize objects
-  pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
-  pcl::PolygonMesh triangles;
+    // Initialize objects
+    pcl::GreedyProjectionTriangulation<pcl::PointNormal> gp3;
+    pcl::PolygonMesh triangles;
 
-  // Set the maximum distance between connected points (maximum edge length)
-  gp3.setSearchRadius (0.025);
+    // Set the maximum distance between connected points (maximum edge length)
+    gp3.setSearchRadius (0.025);
 
-  // Set typical values for the parameters
-  gp3.setMu (2.5);
-  gp3.setMaximumNearestNeighbors (100);
-  gp3.setMaximumSurfaceAngle(M_PI/4); // 45 degrees
-  gp3.setMinimumAngle(M_PI/18); // 10 degrees
-  gp3.setMaximumAngle(2*M_PI/3); // 120 degrees
-  gp3.setNormalConsistency(false);
+    // Set typical values for the parameters
+    gp3.setMu (2.5);
+    gp3.setMaximumNearestNeighbors (100);
+    gp3.setMaximumSurfaceAngle(M_PI/4); // 45 degrees
+    gp3.setMinimumAngle(M_PI/18); // 10 degrees
+    gp3.setMaximumAngle(2*M_PI/3); // 120 degrees
+    gp3.setNormalConsistency(false);
 
-  // Get result
-  gp3.setInputCloud (cloud_with_normals);
-  gp3.setSearchMethod (tree2);
-  gp3.reconstruct (triangles);
+    // Get result
+    gp3.setInputCloud (cloud_with_normals);
+    gp3.setSearchMethod (tree2);
+    gp3.reconstruct (triangles);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-  // Create the kinect-obtained object
-  vtkSmartPointer<vtkPolyData> object = vtkSmartPointer<vtkPolyData>::New();
+    // Create the kinect-obtained object
+    vtkSmartPointer<vtkPolyData> object = vtkSmartPointer<vtkPolyData>::New();
 
-  // Pass the surface mesh to the kinect-obtained object
-  pcl::VTKUtils::convertToVTK(triangles,object);
+    // Pass the surface mesh to the kinect-obtained object
+    pcl::VTKUtils::convertToVTK(triangles,object);
 
-  // Create the locator
-  vtkSmartPointer<vtkOBBTree> otree = vtkSmartPointer<vtkOBBTree>::New();
-  otree->SetDataSet(object);
-  otree->BuildLocator();
- 
-  // Intersect the locator with the line
-  double lineP0[3] = {-0.2, 0.0, -2.0};
-  double lineP1[3] = {-0.2, 0.0, 2.0};
-  vtkSmartPointer<vtkPoints> intersectPoints = vtkSmartPointer<vtkPoints>::New();
- 
-  otree->IntersectWithLine(lineP0, lineP1, intersectPoints, NULL);
+    // Create the locator
+    vtkSmartPointer<vtkOBBTree> otree = vtkSmartPointer<vtkOBBTree>::New();
+    otree->SetDataSet(object);
+    otree->BuildLocator();
 
-  std::cout << "NumPoints: " << intersectPoints->GetNumberOfPoints() << std::endl;
+    // Intersect the locator with the line
+    double lineP0[3] = {-0.2, 0.0, -2.0};
+    double lineP1[3] = {-0.2, 0.0, 2.0};
+    vtkSmartPointer<vtkPoints> intersectPoints = vtkSmartPointer<vtkPoints>::New();
 
-  for(int i=0;i<intersectPoints->GetNumberOfPoints();i++) {
-      double intersection[3];
-      intersectPoints->GetPoint(i, intersection);
-      std::cout << "Intersection: " << intersection[0] << ", "  << intersection[1] << ", "
-          << intersection[2] << std::endl;
-  }
- 
-  // Let's create a graphical representation of the pointing line
-  vtkSmartPointer<vtkLineSource> lineSource = vtkSmartPointer<vtkLineSource>::New();
-  lineSource->SetPoint1(lineP0);
-  lineSource->SetPoint2(lineP1);
-  lineSource->Update();
+    otree->IntersectWithLine(lineP0, lineP1, intersectPoints, NULL);
 
-  // Create a polyline
-  double p0[3] = {0.0, 0.0, 0.0};
-  double p1[3] = {0.0, 1.0, 0.0};
-  double p2[3] = {1.0, 1.0, 0.0};
-  double p3[3] = {1.0, 0.0, 0.0};
-  vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-  points->InsertNextPoint(p0);
-  points->InsertNextPoint(p1);
-  points->InsertNextPoint(p2);
-  points->InsertNextPoint(p3);
-  points->InsertNextPoint(p0);
-  vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
-  for(unsigned int i = 0; i < 4; i++) {
-    vtkSmartPointer<vtkLine> line = vtkSmartPointer<vtkLine>::New();
-    line->GetPointIds()->SetId(0,i);
-    line->GetPointIds()->SetId(1,i+1);
-    lines->InsertNextCell(line);
-  }
-  vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
-  linesPolyData->SetPoints(points);
-  linesPolyData->SetLines(lines);
+    std::cout << "NumPoints: " << intersectPoints->GetNumberOfPoints() << std::endl;
 
-  // Maps to graphics library
-  vtkPolyDataMapper *map = vtkPolyDataMapper::New();
-  vtkPolyDataMapper *map2 = vtkPolyDataMapper::New();
-  vtkPolyDataMapper *map3 = vtkPolyDataMapper::New();
+    for(int i=0; i<intersectPoints->GetNumberOfPoints(); i++) {
+        double intersection[3];
+        intersectPoints->GetPoint(i, intersection);
+        std::cout << "Intersection: " << intersection[0] << ", "  << intersection[1] << ", "
+                  << intersection[2] << std::endl;
+    }
 
-  map->SetInput(object);
-  map2->SetInput(lineSource->GetOutput());
-  map3->SetInput(linesPolyData);
+    // Let's create a graphical representation of the pointing line
+    vtkSmartPointer<vtkLineSource> lineSource = vtkSmartPointer<vtkLineSource>::New();
+    lineSource->SetPoint1(lineP0);
+    lineSource->SetPoint2(lineP1);
+    lineSource->Update();
 
-  // Actor coordinates geometry, properties, transformation
-  vtkActor *aObject = vtkActor::New();
-  vtkActor *aLine = vtkActor::New();
-  vtkActor *aLines = vtkActor::New();
+    // Create a polyline for a 1x1 square (floor)
+    double p0[3] = {0.0, 0.0, 0.0};
+    double p1[3] = {0.0, 1.0, 0.0};
+    double p2[3] = {1.0, 1.0, 0.0};
+    double p3[3] = {1.0, 0.0, 0.0};
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    points->InsertNextPoint(p0);
+    points->InsertNextPoint(p1);
+    points->InsertNextPoint(p2);
+    points->InsertNextPoint(p3);
+    points->InsertNextPoint(p0);
+    vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
+    for(unsigned int i = 0; i < 4; i++) {
+        vtkSmartPointer<vtkLine> line = vtkSmartPointer<vtkLine>::New();
+        line->GetPointIds()->SetId(0,i);
+        line->GetPointIds()->SetId(1,i+1);
+        lines->InsertNextCell(line);
+    }
+    vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
+    linesPolyData->SetPoints(points);
+    linesPolyData->SetLines(lines);
 
-  aObject->SetMapper(map);
-  aLine->SetMapper(map2);
-  aLines->SetMapper(map3);
+    // Maps to graphics library
+    vtkPolyDataMapper *mObject = vtkPolyDataMapper::New();
+    vtkPolyDataMapper *mLine = vtkPolyDataMapper::New();
+    vtkPolyDataMapper *mLines = vtkPolyDataMapper::New();
 
-  aObject->GetProperty()->SetColor(0,0,1); // sphere color blue
-  aLine->GetProperty()->SetColor(1,1,1); // line color green
-  aLines->GetProperty()->SetColor(0.5,0.5,0.5); // color
+    mObject->SetInput(object);
+    mLine->SetInput(lineSource->GetOutput());
+    mLines->SetInput(linesPolyData);
 
-  // a renderer and render window
-  vtkRenderer *ren1 = vtkRenderer::New();
-  vtkRenderWindow *renWin = vtkRenderWindow::New();
-  renWin->AddRenderer(ren1);
+    // Actor coordinates geometry, properties, transformation
+    vtkActor *aObject = vtkActor::New();
+    vtkActor *aLine = vtkActor::New();
+    vtkActor *aLines = vtkActor::New();
 
-  // an interactor
-  vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
-  iren->SetRenderWindow(renWin);
+    aObject->SetMapper(mObject);
+    aLine->SetMapper(mLine);
+    aLines->SetMapper(mLines);
 
-  vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
-  axes->SetTotalLength(0.1,0.1,0.1);
-  axes->AxisLabelsOff();
-  // vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
-  // transform->Translate(1.0, 0.0, 0.0);
-  // axes->SetUserTransform(transform);
+    aObject->GetProperty()->SetColor(0,0,1); // sphere color blue
+    aLine->GetProperty()->SetColor(1,1,1); // line color green
+    aLines->GetProperty()->SetColor(0.5,0.5,0.5); // color
 
-  // add the actor to the scene
-  ren1->AddActor(aObject);
-  ren1->AddActor(aLine);
-  ren1->AddActor(aLines);
-  ren1->AddActor(axes);
-  ren1->SetBackground(0,0,0); // Background color white
+    // a renderer and render window
+    vtkRenderer *ren1 = vtkRenderer::New();
+    vtkRenderWindow *renWin = vtkRenderWindow::New();
+    renWin->AddRenderer(ren1);
 
-  // render an image (lights and cameras are created automatically)
-  renWin->Render();
+    // an interactor
+    vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+    iren->SetRenderWindow(renWin);
 
-  // begin mouse interaction
-  iren->Start();
+    vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
+    axes->SetTotalLength(0.1,0.1,0.1);
+    axes->AxisLabelsOff();
+    // vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
+    // transform->Translate(1.0, 0.0, 0.0);
+    // axes->SetUserTransform(transform);
 
-  // release memory and return
-  object->Delete();
-  map->Delete();
-  ren1->Delete();
-  renWin->Delete();
-  iren->Delete();
-  return 0;
-} 
+    // add the actor to the scene
+    ren1->AddActor(aObject);
+    ren1->AddActor(aLine);
+    ren1->AddActor(aLines);
+    ren1->AddActor(axes);
+    ren1->SetBackground(0,0,0); // Background color white
+
+    // render an image (lights and cameras are created automatically)
+    renWin->Render();
+
+    // begin mouse interaction
+    iren->Start();
+
+    // release memory and return
+    object->Delete();
+    mObject->Delete();
+    mLine->Delete();
+    mLines->Delete();
+    ren1->Delete();
+    renWin->Delete();
+    iren->Delete();
+    return 0;
+}
