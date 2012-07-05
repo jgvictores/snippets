@@ -10,18 +10,14 @@
 
 class SimpleOpenNIViewer {
 public:
-//    SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer") {}
     SimpleOpenNIViewer () {}
 
     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZ>::ConstPtr &cloud) {
-//        if (!viewer.wasStopped())
-//            viewer.showCloud (cloud);
             printf("alive2...\n");
             writer.write<pcl::PointXYZ> ("kinect_cloud.pcd", *cloud, false); //*
     }
 
     void run () {
-      while(1){
 
         pcl::Grabber* interface = new pcl::OpenNIGrabber();
 
@@ -30,12 +26,11 @@ public:
 
         interface->registerCallback (f);
 
+      while(1){
         interface->start ();
 
-//        while (!viewer.wasStopped()) {
-            boost::this_thread::sleep (boost::posix_time::seconds (1));
-            printf("alive...\n");
-//        }
+        boost::this_thread::sleep (boost::posix_time::seconds (1));
+        printf("alive...\n");
 
         interface->stop ();
       }
