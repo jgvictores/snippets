@@ -9,7 +9,6 @@ project(${KEYWORD})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/conf/")
 
-find_package(YARP REQUIRED)
 find_package(OpenNI REQUIRED)
 
 # Search for source code.
@@ -30,7 +29,7 @@ include_directories(${YARP_INCLUDE_DIRS})
 # Set up our main executable.
 if (folder_source)
   add_executable(${KEYWORD} ${folder_source} ${folder_header})
-  target_link_libraries(${KEYWORD} ${YARP_LIBRARIES})
+  target_link_libraries(${KEYWORD} ${YARP_LIBRARIES} OpenNI)
 else (folder_source)
   message(FATAL_ERROR "No source code files found. Please add something")
 endif (folder_source)
