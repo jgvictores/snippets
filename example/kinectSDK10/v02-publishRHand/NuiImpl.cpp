@@ -804,13 +804,13 @@ void CSkeletalViewerApp::Nui_GotSkeletonAlert( )
 			wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].x);
         	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].y);
         	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].z);
-			wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].w);  // Quality level
+			//j//wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].w);  // Quality level, for now always = 1
 			b.addList() = wristB;
 			Bottle handB;
 			handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].x);
         	handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].y);
         	handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].z);
-			handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].w);  // Quality level
+			//j//handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].w);  // Quality level, for now always = 1
 			b.addList() = handB;
 			port.write(b);
         }
