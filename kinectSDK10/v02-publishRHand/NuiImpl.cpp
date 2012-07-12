@@ -801,10 +801,13 @@ void CSkeletalViewerApp::Nui_GotSkeletonAlert( )
             Bottle b;
 			//j//b.addInt(i); // Player number
 			Bottle wristB;
-			wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].x);
+			/*wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].x);
         	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].y);
-        	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].z);
+        	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].z);*/
 			//j//wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].w);  // Quality level, for now always = 1
+			wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_ELBOW_RIGHT].x);
+        	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_ELBOW_RIGHT].y);
+        	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_ELBOW_RIGHT].z);
 			b.addList() = wristB;
 			Bottle handB;
 			handB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].x);
