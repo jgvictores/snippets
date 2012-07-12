@@ -799,7 +799,7 @@ void CSkeletalViewerApp::Nui_GotSkeletonAlert( )
 			SkeletonFrame.SkeletonData[i].eSkeletonPositionTrackingState[NUI_SKELETON_POSITION_HAND_RIGHT] != NUI_SKELETON_POSITION_NOT_TRACKED )
         {
             Bottle b;
-			b.addInt(i); // Player number
+			//j//b.addInt(i); // Player number
 			Bottle wristB;
 			wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].x);
         	wristB.addDouble(SkeletonFrame.SkeletonData[i].SkeletonPositions[NUI_SKELETON_POSITION_WRIST_RIGHT].y);
