@@ -1,8 +1,9 @@
-/** \example orplanning_module.cpp
-    \author Rosen Diankov
+/** \example or2dplanning.cpp
+    \author Juan G Victores
+    \contrib Rosen Diankov (author of orplanning_module.cpp)
 
     Shows how to use a planner from a module to move the arm withut colliding into anything.
-    The default values plan for all the joints of the robot.
+    The default values plan for Base of the robot.
 
     <b>Full Example Code:</b>
  */
@@ -113,3 +114,4 @@ int main(int argc, char ** argv)
     cppexamples::PlanningModuleExample example;
     return example.main(argc,argv);
 }
+
