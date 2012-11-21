@@ -87,7 +87,7 @@ public:
                 }
 
                 stringstream cmdin,cmdout;
-                cmdin << "MoveActiveJoints goal ";
+                cmdin << "MoveActiveJoints maxiter 2000 maxtries 1 goal ";
                 for(size_t i = 0; i < v.size(); ++i) {
                     cmdin << v[i] << " ";
                 }
