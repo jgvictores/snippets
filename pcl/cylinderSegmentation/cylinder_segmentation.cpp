@@ -15,7 +15,7 @@ int main (int argc, char** argv)
 
   std::string filename("file_0.pcd");
 
-  if (argc > 2)
+  if (argc > 1)
     filename = argv[1];
 
   pcl::console::print_info ("filename: %s\n", filename.c_str());
