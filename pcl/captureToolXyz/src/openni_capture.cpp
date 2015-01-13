@@ -67,7 +67,12 @@ OpenNICapture::onNewFrame (const PointCloudConstPtr &cloud)
 {
   mutex_.lock ();
   ++frame_counter_;
-  most_recent_frame_ = boost::make_shared<PointCloud> (*cloud); // Make a copy of the frame
+  // most_recent_frame_ = boost::make_shared<PointCloud> (*cloud); // Make a copy of the frame
+  //-- Last line breaks in 32-bit architectures
+  //-- Thanks: http://www.pcl-users.org/makeShared-make-shared-and-Eigen-PCL-Was-Re-Ros-kinect-about-about-Kinect-Compatibility-amp-install--td2381641.html
+  //-- Where Radu says: cloud.makeShared () basically replaced boost::make_shared with: 
+  //-- Hence, the line is replaced new next line:
+  most_recent_frame_ = cloud->makeShared();  // Make a copy of the frame
   mutex_.unlock ();
 }
 
