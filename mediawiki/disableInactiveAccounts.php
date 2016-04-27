@@ -30,7 +30,7 @@ require_once __DIR__ . '/Maintenance.php';
  *
  * @ingroup Maintenance
  */
-class RemoveUnusedAccounts extends Maintenance {
+class DisableInactiveAccounts extends Maintenance {
 	public function __construct() {
 		parent::__construct();
 		$this->addOption( 'delete', 'Actually delete the account' );
@@ -132,5 +132,5 @@ class RemoveUnusedAccounts extends Maintenance {
 	}
 }
 
-$maintClass = "RemoveUnusedAccounts";
+$maintClass = "DisableInactiveAccounts";
 require_once RUN_MAINTENANCE_IF_MAIN;
