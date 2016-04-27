@@ -62,7 +62,7 @@ class DisableInactiveAccounts extends Maintenance {
 			# group or if it's touched within the $touchedSeconds seconds.
 			$instance = User::newFromId( $row->user_id );
 			if ( count( array_intersect( $instance->getEffectiveGroups(), $excludedGroups ) ) == 0
-				&& $this->isInactiveAccount( $row->user_id, true )
+#				&& $this->isInactiveAccount( $row->user_id, true )  #-- Do not care if user has edited long ago.
 				&& wfTimestamp( TS_UNIX, $row->user_touched ) < wfTimestamp( TS_UNIX, time() - $touchedSeconds )
 			) {
 				# Inactive; print out the name and flag it
