@@ -76,11 +76,16 @@ class DisableInactiveAccounts extends Maintenance {
 		if ( $count > 0 && $this->hasOption( 'disable' ) ) {
 			$this->output( "\nDisabling unused accounts..." );
 			$dbw = wfGetDB( DB_MASTER );
-			$dbw->update( /* TABLE??? */ 'user',
+			$dbw->update( /* TABLE */ 'user',
 				/* SET */ array( 'user_email'  => null ),
 				/* WHERE */ array( 'user_id' => $del ),
 				__METHOD__
-				);
+			);
+			$dbw->update( /* TABLE */ 'user',
+				/* SET */ array( 'user_password'  => null ),
+				/* WHERE */ array( 'user_id' => $del ),
+				__METHOD__
+			);
 #			$dbw->delete( 'user', array( 'user_id' => $del ), __METHOD__ );
 #			$dbw->delete( 'user_groups', array( 'ug_user' => $del ), __METHOD__ );
 #			$dbw->delete( 'user_former_groups', array( 'ufg_user' => $del ), __METHOD__ );
