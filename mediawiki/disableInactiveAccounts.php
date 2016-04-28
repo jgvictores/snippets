@@ -86,21 +86,12 @@ class DisableInactiveAccounts extends Maintenance {
 				/* WHERE */ array( 'user_id' => $del ),
 				__METHOD__
 			);
-#			$dbw->delete( 'user', array( 'user_id' => $del ), __METHOD__ );
-#			$dbw->delete( 'user_groups', array( 'ug_user' => $del ), __METHOD__ );
-#			$dbw->delete( 'user_former_groups', array( 'ufg_user' => $del ), __METHOD__ );
-#			$dbw->delete( 'user_properties', array( 'up_user' => $del ), __METHOD__ );
-#			$dbw->delete( 'logging', array( 'log_user' => $del ), __METHOD__ );
-#			$dbw->delete( 'recentchanges', array( 'rc_user' => $del ), __METHOD__ );
-#			$this->output( "done.\n" );
-			# Update the site_stats.ss_users field
-#			$users = $dbw->selectField( 'user', 'COUNT(*)', array(), __METHOD__ );
-#			$dbw->update(
-#				'site_stats',
-#				array( 'ss_users' => $users ),
-#				array( 'ss_row_id' => 1 ),
-#				__METHOD__
-#			);
+			foreach( $del as $value ) {
+				$dbw->insert( /* TABLE */ 'user_groups',
+					array( 'ug_user'  => $value, 'ug_group' => 'inactive' ),
+					__METHOD__
+				);
+			}
 		} elseif ( $count > 0 ) {
 			$this->output( "\nRun the script again with --disable to disable them in the database.\n" );
 		}
