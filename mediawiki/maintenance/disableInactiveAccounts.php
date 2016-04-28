@@ -20,7 +20,7 @@
  *
  * @file
  * @ingroup Maintenance
- * @author Rob Church <robchur@gmail.com>
+ * @author Juan G Victores <jgvicto@gmail.com> based on RemoveUnusedAccounts.php by Rob Church <robchur@gmail.com>
  */
 
 require_once __DIR__ . '/Maintenance.php';
