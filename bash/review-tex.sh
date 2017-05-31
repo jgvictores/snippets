@@ -9,3 +9,4 @@ grep "But" *.tex  # sed: omit or replace by however
 
 # 
 grep -i "problem" *.tex # sed: issue, challenge
+grep -i "do" *.tex # sed: perform
