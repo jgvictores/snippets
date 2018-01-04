@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Punctuation
 grep "\.\." *.tex | grep -v "\.\.\." | grep -v "\.\.\/"  # sed: \.
