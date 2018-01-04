@@ -10,6 +10,7 @@ grep "But" *.tex  # sed: omit or replace by however
 #
 grep -i "do" *.tex # sed: perform
 grep -i "also" *.tex # sed: additionally
+grep -i "just" *.tex # sed: only
 
 # 
 grep -i "problem" *.tex # sed: issue, challenge
