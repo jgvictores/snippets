@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 for d in */ ; do
     echo "$d"
