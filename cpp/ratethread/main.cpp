@@ -28,6 +28,7 @@ public:
 class RateThreadHelper
 {
 public:
+
     RateThreadHelper(const int intervalPeriodMillis) : isStopping(false)
     {
         std::chrono::milliseconds a{intervalPeriodMillis};
@@ -59,7 +60,7 @@ public:
         std::chrono::system_clock::time_point currentStartTime{ std::chrono::system_clock::now() };
         std::chrono::system_clock::time_point nextStartTime{ currentStartTime };
 
-        int32_t loopNum{ 0 };
+        //int32_t loopNum{ 0 };
 
         while ( ! isStopping )
         {
@@ -74,7 +75,7 @@ public:
 
             //Sleep till our next period start time
             std::this_thread::sleep_until(nextStartTime);
-            ++loopNum;
+            //++loopNum;
         } //end while
     }
 
@@ -90,12 +91,22 @@ public:
 
     RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
 
+    /***
+     * Loop function.
+     *
+     * This is the thread itself. The thread calls the run() function every <period> ms. At the end of each run, the thread will sleep
+     * the amount of time required, taking into account the time spent inside the loop function.
+     ***/
+    virtual void run() = 0;
+
+    /// Call this to start the thread
     void start()
     {
         pthread = new std::thread( &RateThreadHelper::start, &rateThreadHelper, this );
         //std::cout<<"[RateThread] Created new thread..." << std::endl;
     }
 
+    /// Call this to stop the thread, this call blocks until the thread is terminated
     void stop()
     {
         rateThreadHelper.stop();
