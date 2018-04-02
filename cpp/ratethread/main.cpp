@@ -18,6 +18,12 @@ const double microsPerClkTic
     1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den
 };
 
+class IRunnable
+{
+public:
+    virtual void run() = 0;
+    virtual ~IRunnable() {}
+};
 
 class RateThreadHelper
 {
@@ -28,7 +34,7 @@ public:
         _intervalPeriodMillis = a;
     }
 
-    void start()
+    void start(IRunnable* iRunnable)
     {
         std::cout << "system_clock precision = "
                   << microsPerClkTic
@@ -38,6 +44,7 @@ public:
                   << _intervalPeriodMillis.count()
                   << " milliseconds"
                   << std::endl;
+        _iRunnable = iRunnable;
         loop();
     }
 
@@ -60,6 +67,7 @@ public:
             currentStartTime = std::chrono::system_clock::now();
 
             std::cout << "Here: " << loopNum << std::endl;
+            _iRunnable->run();
 
             //Determine the point in time at which we want to wakeup for the next pass through the loop.
             nextStartTime = currentStartTime + _intervalPeriodMillis;
@@ -73,17 +81,23 @@ public:
 private:
     bool isStopping;
     std::chrono::milliseconds _intervalPeriodMillis;
+    IRunnable* _iRunnable;
 };
 
-class RateThread
+class RateThread : public IRunnable
 {
 public:
 
     RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
 
+    virtual void run()
+    {
+        std::cout << "[RateThread] Run!" << std::endl;
+    }
+
     void start()
     {
-        pthread = new std::thread( &RateThreadHelper::start, &rateThreadHelper );
+        pthread = new std::thread( &RateThreadHelper::start, &rateThreadHelper, this );
         std::cout<<"[RateThread] Created new Thread..." << std::endl;
     }
 
