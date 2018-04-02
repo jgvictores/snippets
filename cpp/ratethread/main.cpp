@@ -36,14 +36,14 @@ public:
 
     void start(IRunnable* iRunnable)
     {
-        std::cout << "system_clock precision = "
+        /*std::cout << "[RateThreadHelper] system_clock precision = "
                   << microsPerClkTic
                   << " microseconds/tic"
                   << std::endl
                   << "Desired Wakeup Period = "
                   << _intervalPeriodMillis.count()
                   << " milliseconds"
-                  << std::endl;
+                  << std::endl;*/
         _iRunnable = iRunnable;
         loop();
     }
@@ -66,7 +66,7 @@ public:
             //Get our current "wakeup" time
             currentStartTime = std::chrono::system_clock::now();
 
-            std::cout << "Here: " << loopNum << std::endl;
+            //std::cout << "Here: " << loopNum << std::endl;
             _iRunnable->run();
 
             //Determine the point in time at which we want to wakeup for the next pass through the loop.
@@ -90,21 +90,16 @@ public:
 
     RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
 
-    virtual void run()
-    {
-        std::cout << "[RateThread] Run!" << std::endl;
-    }
-
     void start()
     {
         pthread = new std::thread( &RateThreadHelper::start, &rateThreadHelper, this );
-        std::cout<<"[RateThread] Created new Thread..." << std::endl;
+        //std::cout<<"[RateThread] Created new thread..." << std::endl;
     }
 
     void stop()
     {
         rateThreadHelper.stop();
-        std::cout<<"[RateThread] Waiting For Thread to join..." << std::endl;
+        //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
         pthread->join();
         delete pthread;
         pthread = 0;
@@ -115,18 +110,32 @@ private:
     std::thread* pthread;
 };
 
+/*** USER CODE HERE ***/
+
+class MyRateThread : public RateThread
+{
+public:
+    MyRateThread(const int intervalPeriodMillis) : RateThread(intervalPeriodMillis) {}
+
+    void run()
+    {
+        std::cout<<"[MyRateThread] here..." << std::endl;
+    }
+};
 
 int main()
 {
-    RateThread rateThread(1000);
+    MyRateThread rateThread(1000);
+
+    std::cout<<"[main] Start MyThread..."<<std::endl;
     rateThread.start();
 
-    std::cout<<"[main] At cin..."<<std::endl;
+    std::cout<<"[main] In blocking std::cin..."<<std::endl;
     char ch{};
     std::cin >> ch;
-    rateThread.stop();
 
-    std::cout<<"[main] Waiting For Thread to complete..."<<std::endl;
-    std::cout<<"[main] Exiting from Main Thread"<<std::endl;
+    std::cout<<"[main] Stopping MyThread..."<<std::endl;
+    rateThread.stop();
+    std::cout<<"[main] MyThread stopped. Exiting main()."<<std::endl;
     return 0;
 }
