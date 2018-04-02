@@ -18,27 +18,36 @@ const double microsPerClkTic
     1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den
 };
 
-class RateThread
+
+class RateThreadHelper
 {
 public:
-
-    RateThread() : isStopping(false) {}
-
-    void stop()
+    RateThreadHelper(const int intervalPeriodMillis) : isStopping(false)
     {
-        isStopping = true;
+        std::chrono::milliseconds a{intervalPeriodMillis};
+        _intervalPeriodMillis = a;
     }
 
-    void start(const std::chrono::milliseconds intervalPeriodMillis)
+    void start()
     {
         std::cout << "system_clock precision = "
                   << microsPerClkTic
                   << " microseconds/tic"
                   << std::endl
                   << "Desired Wakeup Period = "
-                  << intervalPeriodMillis.count()
+                  << _intervalPeriodMillis.count()
                   << " milliseconds"
                   << std::endl;
+        loop();
+    }
+
+    void stop()
+    {
+        isStopping = true;
+    }
+
+    void loop()
+    {
 
         std::chrono::system_clock::time_point currentStartTime{ std::chrono::system_clock::now() };
         std::chrono::system_clock::time_point nextStartTime{ currentStartTime };
@@ -53,7 +62,7 @@ public:
             std::cout << "Here: " << loopNum << std::endl;
 
             //Determine the point in time at which we want to wakeup for the next pass through the loop.
-            nextStartTime = currentStartTime + intervalPeriodMillis;
+            nextStartTime = currentStartTime + _intervalPeriodMillis;
 
             //Sleep till our next period start time
             std::this_thread::sleep_until(nextStartTime);
@@ -63,23 +72,47 @@ public:
 
 private:
     bool isStopping;
+    std::chrono::milliseconds _intervalPeriodMillis;
+};
+
+class RateThread
+{
+public:
+
+    RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
+
+    void start()
+    {
+        pthread = new std::thread( &RateThreadHelper::start, &rateThreadHelper );
+        std::cout<<"[RateThread] Created new Thread..." << std::endl;
+    }
+
+    void stop()
+    {
+        rateThreadHelper.stop();
+        std::cout<<"[RateThread] Waiting For Thread to join..." << std::endl;
+        pthread->join();
+        delete pthread;
+        pthread = 0;
+    }
+
+private:
+    RateThreadHelper rateThreadHelper;
+    std::thread* pthread;
 };
 
 
 int main()
 {
-    const std::chrono::milliseconds intervalPeriodMillis{ 500 };
-
-    RateThread rateObj;
-    std::thread threadObj( &RateThread::start, &rateObj, intervalPeriodMillis );
+    RateThread rateThread(1000);
+    rateThread.start();
 
     std::cout<<"[main] At cin..."<<std::endl;
     char ch{};
     std::cin >> ch;
-    rateObj.stop();
+    rateThread.stop();
 
     std::cout<<"[main] Waiting For Thread to complete..."<<std::endl;
-    threadObj.join();
     std::cout<<"[main] Exiting from Main Thread"<<std::endl;
     return 0;
 }
