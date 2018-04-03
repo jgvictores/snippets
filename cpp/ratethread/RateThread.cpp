@@ -27,8 +27,7 @@ private:
 
 RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : _isStopping(false)
 {
-    std::chrono::milliseconds a{intervalPeriodMillis};
-    _intervalPeriodMillis = a;
+    _intervalPeriodMillis = std::chrono::milliseconds{intervalPeriodMillis};
 }
 
 void RateThreadHelper::start(IRunnable* iRunnable)
