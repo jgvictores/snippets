@@ -11,6 +11,7 @@ class MyRateThread : public ratethread::RateThread
 public:
     MyRateThread(const int intervalPeriodMillis) : ratethread::RateThread(intervalPeriodMillis) {}
 
+private:
     void run()
     {
         std::cout<<"[MyRateThread] here..." << std::endl;

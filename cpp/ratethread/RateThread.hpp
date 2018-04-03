@@ -20,9 +20,15 @@ class RateThreadHelper;
 class RateThread : public IRunnable
 {
 public:
-
     RateThread(const int intervalPeriodMillis);
 
+    /// Call this to start the thread
+    void start();
+
+    /// Call this to stop the thread, this call blocks until the thread is terminated
+    void stop();
+
+protected:
     /***
      * Loop function.
      *
@@ -30,12 +36,6 @@ public:
      * the amount of time required, taking into account the time spent inside the loop function.
      ***/
     virtual void run() = 0;
-
-    /// Call this to start the thread
-    void start();
-
-    /// Call this to stop the thread, this call blocks until the thread is terminated
-    void stop();
 
 private:
     RateThreadHelper* _rateThreadHelperPtr;
