@@ -18,6 +18,7 @@ class RateThread : public IRunnable
 {
 public:
     RateThread(const int intervalPeriodMillis);
+    ~RateThread();
 
     /// Call this to start the thread
     void start();

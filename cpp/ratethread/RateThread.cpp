@@ -78,6 +78,12 @@ RateThread::RateThread(const int intervalPeriodMillis)
     _rateThreadHelperPtr = new RateThreadHelper(intervalPeriodMillis);
 }
 
+RateThread::~RateThread()
+{
+    delete _rateThreadHelperPtr;
+    _rateThreadHelperPtr = 0;
+}
+
 void RateThread::start()
 {
     _threadPtr = new std::thread( &RateThreadHelper::start, reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr), this );
@@ -91,8 +97,6 @@ void RateThread::stop()
     _threadPtr->join();
     delete _threadPtr;
     _threadPtr = 0;
-    delete _rateThreadHelperPtr;
-    _rateThreadHelperPtr = 0;
 }
 
 }  // namespace ratethread
