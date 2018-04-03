@@ -11,10 +11,23 @@
 namespace ratethread
 {
 
-RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : isStopping(false)
+class RateThreadHelper
 {
-    std::chrono::milliseconds a{intervalPeriodMillis};
-    _intervalPeriodMillis = a;
+public:
+    RateThreadHelper(const int intervalPeriodMillis);
+    void start(IRunnable* iRunnable);
+    void stop();
+
+private:
+    void loop();
+    bool _isStopping;
+    std::chrono::milliseconds _intervalPeriodMillis;
+    IRunnable* _iRunnable;
+};
+
+RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : _isStopping(false)
+{
+    _intervalPeriodMillis = std::chrono::milliseconds{intervalPeriodMillis};
 }
 
 void RateThreadHelper::start(IRunnable* iRunnable)
@@ -34,7 +47,7 @@ void RateThreadHelper::start(IRunnable* iRunnable)
 
 void RateThreadHelper::stop()
 {
-    isStopping = true;
+    _isStopping = true;
 }
 
 void RateThreadHelper::loop()
@@ -42,7 +55,7 @@ void RateThreadHelper::loop()
     std::chrono::system_clock::time_point currentStartTime{ std::chrono::system_clock::now() };
     std::chrono::system_clock::time_point nextStartTime{ currentStartTime };
 
-    while ( ! isStopping )
+    while ( ! _isStopping )
     {
         //Get our current "wakeup" time
         currentStartTime = std::chrono::system_clock::now();
@@ -60,22 +73,26 @@ void RateThreadHelper::loop()
 }
 
 
-
-RateThread::RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
+RateThread::RateThread(const int intervalPeriodMillis)
+{
+    _rateThreadHelperPtr = new RateThreadHelper(intervalPeriodMillis);
+}
 
 void RateThread::start()
 {
-    threadPtr = new std::thread( &RateThreadHelper::start, &rateThreadHelper, this );
+    _threadPtr = new std::thread( &RateThreadHelper::start, _rateThreadHelperPtr, this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
 
 void RateThread::stop()
 {
-    rateThreadHelper.stop();
+    _rateThreadHelperPtr->stop();
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
-    threadPtr->join();
-    delete threadPtr;
-    threadPtr = 0;
+    _threadPtr->join();
+    delete _threadPtr;
+    _threadPtr = 0;
+    delete _rateThreadHelperPtr;
+    _rateThreadHelperPtr = 0;
 }
 
 }  // namespace ratethread
