@@ -81,7 +81,7 @@ RateThread::RateThread(const int intervalPeriodMillis)
 RateThread::~RateThread()
 {
     stop();
-    delete _rateThreadHelperPtr;
+    delete reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr);
     _rateThreadHelperPtr = 0;
 }
 
