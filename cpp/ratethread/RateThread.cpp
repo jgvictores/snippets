@@ -80,13 +80,13 @@ RateThread::RateThread(const int intervalPeriodMillis)
 
 void RateThread::start()
 {
-    _threadPtr = new std::thread( &RateThreadHelper::start, _rateThreadHelperPtr, this );
+    _threadPtr = new std::thread( &RateThreadHelper::start, reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr), this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
 
 void RateThread::stop()
 {
-    _rateThreadHelperPtr->stop();
+    reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr)->stop();
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
     _threadPtr->join();
     delete _threadPtr;

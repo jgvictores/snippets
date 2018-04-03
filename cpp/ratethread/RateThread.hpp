@@ -14,8 +14,6 @@ public:
     virtual ~IRunnable() {}
 };
 
-class RateThreadHelper;
-
 class RateThread : public IRunnable
 {
 public:
@@ -37,7 +35,7 @@ protected:
     virtual void run() = 0;
 
 private:
-    RateThreadHelper* _rateThreadHelperPtr;
+    void* _rateThreadHelperPtr;
     std::thread* _threadPtr;
 };
 
