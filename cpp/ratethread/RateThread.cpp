@@ -14,13 +14,12 @@ namespace ratethread
 class RateThreadHelper
 {
 public:
-
     RateThreadHelper(const int intervalPeriodMillis);
     void start(IRunnable* iRunnable);
     void stop();
-    void loop();
 
 private:
+    void loop();
     bool isStopping;
     std::chrono::milliseconds _intervalPeriodMillis;
     IRunnable* _iRunnable;
@@ -73,7 +72,6 @@ void RateThreadHelper::loop()
 
     } //end while
 }
-
 
 
 RateThread::RateThread(const int intervalPeriodMillis) : _intervalPeriodMillis(intervalPeriodMillis) { }
