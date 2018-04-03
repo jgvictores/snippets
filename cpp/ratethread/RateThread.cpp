@@ -11,6 +11,21 @@
 namespace ratethread
 {
 
+class RateThreadHelper
+{
+public:
+
+    RateThreadHelper(const int intervalPeriodMillis);
+    void start(IRunnable* iRunnable);
+    void stop();
+    void loop();
+
+private:
+    bool isStopping;
+    std::chrono::milliseconds _intervalPeriodMillis;
+    IRunnable* _iRunnable;
+};
+
 RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : isStopping(false)
 {
     std::chrono::milliseconds a{intervalPeriodMillis};
@@ -61,21 +76,24 @@ void RateThreadHelper::loop()
 
 
 
-RateThread::RateThread(const int intervalPeriodMillis) : rateThreadHelper(intervalPeriodMillis) {}
+RateThread::RateThread(const int intervalPeriodMillis) : _intervalPeriodMillis(intervalPeriodMillis) { }
 
 void RateThread::start()
 {
-    threadPtr = new std::thread( &RateThreadHelper::start, &rateThreadHelper, this );
+    rateThreadHelperPtr = new RateThreadHelper(_intervalPeriodMillis);
+    threadPtr = new std::thread( &RateThreadHelper::start, rateThreadHelperPtr, this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
 
 void RateThread::stop()
 {
-    rateThreadHelper.stop();
+    rateThreadHelperPtr->stop();
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
     threadPtr->join();
     delete threadPtr;
     threadPtr = 0;
+    delete rateThreadHelperPtr;
+    rateThreadHelperPtr = 0;
 }
 
 }  // namespace ratethread

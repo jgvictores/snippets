@@ -15,23 +15,7 @@ public:
     virtual ~IRunnable() {}
 };
 
-class RateThreadHelper
-{
-public:
-
-    RateThreadHelper(const int intervalPeriodMillis);
-
-    void start(IRunnable* iRunnable);
-
-    void stop();
-
-    void loop();
-
-private:
-    bool isStopping;
-    std::chrono::milliseconds _intervalPeriodMillis;
-    IRunnable* _iRunnable;
-};
+class RateThreadHelper;
 
 class RateThread : public IRunnable
 {
@@ -54,8 +38,9 @@ public:
     void stop();
 
 private:
-    RateThreadHelper rateThreadHelper;
+    RateThreadHelper* rateThreadHelperPtr;
     std::thread* threadPtr;
+    const int _intervalPeriodMillis;
 };
 
 
