@@ -19,7 +19,8 @@ RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : isStopping(
 
 void RateThreadHelper::start(IRunnable* iRunnable)
 {
-    /*std::cout << "[RateThreadHelper] system_clock precision = "
+    /*const double microsPerClkTic{ 1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den };
+    std::cout << "[RateThreadHelper] system_clock precision = "
               << microsPerClkTic
               << " microseconds/tic"
               << std::endl
