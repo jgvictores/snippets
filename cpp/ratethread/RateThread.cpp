@@ -82,7 +82,7 @@ RateThread::~RateThread()
 {
     stop();
     delete reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr);
-    _rateThreadHelperPtr = 0;
+    _rateThreadHelperPtr = nullptr;
 }
 
 void RateThread::start()
@@ -99,7 +99,7 @@ void RateThread::stop()
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
     _threadPtr->join();
     delete _threadPtr;
-    _threadPtr = 0;
+    _threadPtr = nullptr;
 }
 
 }  // namespace ratethread
