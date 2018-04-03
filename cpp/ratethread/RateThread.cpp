@@ -80,6 +80,7 @@ RateThread::RateThread(const int intervalPeriodMillis)
 
 RateThread::~RateThread()
 {
+    stop();
     delete _rateThreadHelperPtr;
     _rateThreadHelperPtr = 0;
 }
@@ -92,6 +93,8 @@ void RateThread::start()
 
 void RateThread::stop()
 {
+    if( ! _threadPtr )
+        return;
     reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr)->stop();
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
     _threadPtr->join();
