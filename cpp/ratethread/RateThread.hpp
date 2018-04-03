@@ -38,8 +38,8 @@ public:
     void stop();
 
 private:
-    RateThreadHelper* rateThreadHelperPtr;
-    std::thread* threadPtr;
+    RateThreadHelper* _rateThreadHelperPtr;
+    std::thread* _threadPtr;
     const int _intervalPeriodMillis;
 };
 
