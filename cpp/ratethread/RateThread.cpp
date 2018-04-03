@@ -74,11 +74,13 @@ void RateThreadHelper::loop()
 }
 
 
-RateThread::RateThread(const int intervalPeriodMillis) : _intervalPeriodMillis(intervalPeriodMillis) { }
+RateThread::RateThread(const int intervalPeriodMillis)
+{
+    _rateThreadHelperPtr = new RateThreadHelper(intervalPeriodMillis);
+}
 
 void RateThread::start()
 {
-    _rateThreadHelperPtr = new RateThreadHelper(_intervalPeriodMillis);
     _threadPtr = new std::thread( &RateThreadHelper::start, _rateThreadHelperPtr, this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
