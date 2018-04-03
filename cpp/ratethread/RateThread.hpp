@@ -2,7 +2,6 @@
 // CopyPolicy: released under the terms of the LGPLv2.1
 // URL: https://github.com/jgvictores/snippets
 
-#include <chrono>
 #include <thread>
 
 namespace ratethread
