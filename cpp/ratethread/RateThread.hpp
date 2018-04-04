@@ -25,6 +25,7 @@ public:
     /// Return if is stopping.
     int isStopping() const;
 
+protected:
     /***
      * Loop function.
      *
@@ -34,6 +35,8 @@ public:
     virtual void run() = 0;
 
 private:
+    static void threadFunction(RateThread* callerRateThreadPtr);
+
     int _intervalPeriodMillis;
     bool _isStopping;
     std::thread* _threadPtr;

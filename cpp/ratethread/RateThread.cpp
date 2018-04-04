@@ -8,10 +8,48 @@
 
 #include "RateThread.hpp"
 
-namespace
+namespace ratethread
 {
 
-void threadFunction(ratethread::RateThread* callerRateThreadPtr)
+RateThread::RateThread(const int intervalPeriodMillis) :
+     _isStopping(false),
+    _intervalPeriodMillis(intervalPeriodMillis)
+{
+}
+
+RateThread::~RateThread()
+{
+    stop();
+}
+
+void RateThread::start()
+{
+    _threadPtr = new std::thread( RateThread::threadFunction, this );
+    //std::cout<<"[RateThread] Created new thread..." << std::endl;
+}
+
+void RateThread::stop()
+{
+    if( ! _threadPtr )
+        return;
+    _isStopping = true;
+    //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
+    _threadPtr->join();
+    delete _threadPtr;
+    _threadPtr = nullptr;
+}
+
+int RateThread::getRate() const
+{
+    return _intervalPeriodMillis;
+}
+
+int RateThread::isStopping() const
+{
+    return _isStopping;
+}
+
+void RateThread::threadFunction(RateThread* callerRateThreadPtr)
 {
     /*const double microsPerClkTic{ 1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den };
     std::cout << "[RateThreadHelper] system_clock precision = "
@@ -42,49 +80,6 @@ void threadFunction(ratethread::RateThread* callerRateThreadPtr)
         std::this_thread::sleep_until(nextStartTime);
 
     } //end while
-}
-
-}  // namespace
-
-namespace ratethread
-{
-
-RateThread::RateThread(const int intervalPeriodMillis) :
-     _isStopping(false),
-    _intervalPeriodMillis(intervalPeriodMillis)
-{
-}
-
-RateThread::~RateThread()
-{
-    stop();
-}
-
-void RateThread::start()
-{
-    _threadPtr = new std::thread( threadFunction, this );
-    //std::cout<<"[RateThread] Created new thread..." << std::endl;
-}
-
-void RateThread::stop()
-{
-    if( ! _threadPtr )
-        return;
-    _isStopping = true;
-    //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
-    _threadPtr->join();
-    delete _threadPtr;
-    _threadPtr = nullptr;
-}
-
-int RateThread::getRate() const
-{
-    return _intervalPeriodMillis;
-}
-
-int RateThread::isStopping() const
-{
-    return _isStopping;
 }
 
 }  // namespace ratethread
