@@ -8,10 +8,10 @@
 
 #include "RateThread.hpp"
 
-namespace ratethread
+namespace
 {
 
-void threadFunction(RateThread* callerRateThreadPtr)
+void threadFunction(ratethread::RateThread* callerRateThreadPtr)
 {
     /*const double microsPerClkTic{ 1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den };
     std::cout << "[RateThreadHelper] system_clock precision = "
@@ -44,6 +44,10 @@ void threadFunction(RateThread* callerRateThreadPtr)
     } //end while
 }
 
+}  // namespace
+
+namespace ratethread
+{
 
 RateThread::RateThread(const int intervalPeriodMillis) :
      _isStopping(false),
