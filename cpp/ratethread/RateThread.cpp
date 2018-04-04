@@ -11,26 +11,7 @@
 namespace ratethread
 {
 
-class RateThreadHelper
-{
-public:
-    RateThreadHelper(const int intervalPeriodMillis);
-    void start(IRunnable* iRunnable);
-    void stop();
-
-private:
-    void loop();
-    bool _isStopping;
-    std::chrono::milliseconds _intervalPeriodMillis;
-    IRunnable* _iRunnable;
-};
-
-RateThreadHelper::RateThreadHelper(const int intervalPeriodMillis) : _isStopping(false)
-{
-    _intervalPeriodMillis = std::chrono::milliseconds{intervalPeriodMillis};
-}
-
-void RateThreadHelper::start(IRunnable* iRunnable)
+void threadFunction(RateThread* callerRateThreadPtr)
 {
     /*const double microsPerClkTic{ 1.0E6 * std::chrono::system_clock::period::num / std::chrono::system_clock::period::den };
     std::cout << "[RateThreadHelper] system_clock precision = "
@@ -41,30 +22,21 @@ void RateThreadHelper::start(IRunnable* iRunnable)
               << _intervalPeriodMillis.count()
               << " milliseconds"
               << std::endl;*/
-    _iRunnable = iRunnable;
-    loop();
-}
 
-void RateThreadHelper::stop()
-{
-    _isStopping = true;
-}
-
-void RateThreadHelper::loop()
-{
     std::chrono::system_clock::time_point currentStartTime{ std::chrono::system_clock::now() };
     std::chrono::system_clock::time_point nextStartTime{ currentStartTime };
 
-    while ( ! _isStopping )
+    while ( ! callerRateThreadPtr->isStopping() )
     {
         //Get our current "wakeup" time
         currentStartTime = std::chrono::system_clock::now();
 
-        //std::cout << "Here: " << loopNum << std::endl;
-        _iRunnable->run();
+        //std::cout << "[threadFunction] Here!" << std::endl;
+        callerRateThreadPtr->run();
 
         //Determine the point in time at which we want to wakeup for the next pass through the loop.
-        nextStartTime = currentStartTime + _intervalPeriodMillis;
+        std::chrono::milliseconds millis{callerRateThreadPtr->getRate()};
+        nextStartTime = currentStartTime + millis;
 
         //Sleep till our next period start time
         std::this_thread::sleep_until(nextStartTime);
@@ -73,21 +45,20 @@ void RateThreadHelper::loop()
 }
 
 
-RateThread::RateThread(const int intervalPeriodMillis)
+RateThread::RateThread(const int intervalPeriodMillis) :
+     _isStopping(false),
+    _intervalPeriodMillis(intervalPeriodMillis)
 {
-    _rateThreadHelperPtr = new RateThreadHelper(intervalPeriodMillis);
 }
 
 RateThread::~RateThread()
 {
     stop();
-    delete reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr);
-    _rateThreadHelperPtr = nullptr;
 }
 
 void RateThread::start()
 {
-    _threadPtr = new std::thread( &RateThreadHelper::start, reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr), this );
+    _threadPtr = new std::thread( threadFunction, this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
 
@@ -95,11 +66,21 @@ void RateThread::stop()
 {
     if( ! _threadPtr )
         return;
-    reinterpret_cast<RateThreadHelper*>(_rateThreadHelperPtr)->stop();
+    _isStopping = true;
     //std::cout<<"[RateThread] Waiting For thread to join..." << std::endl;
     _threadPtr->join();
     delete _threadPtr;
     _threadPtr = nullptr;
+}
+
+int RateThread::getRate() const
+{
+    return _intervalPeriodMillis;
+}
+
+int RateThread::isStopping() const
+{
+    return _isStopping;
 }
 
 }  // namespace ratethread

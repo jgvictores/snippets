@@ -7,14 +7,7 @@
 namespace ratethread
 {
 
-class IRunnable
-{
-public:
-    virtual void run() = 0;
-    virtual ~IRunnable() {}
-};
-
-class RateThread : public IRunnable
+class RateThread
 {
 public:
     RateThread(const int intervalPeriodMillis);
@@ -26,7 +19,12 @@ public:
     /// Call this to stop the thread, this call blocks until the thread is terminated
     void stop();
 
-protected:
+    /// Return the current rate of the thread [ms].
+    int getRate() const;
+
+    /// Return if is stopping.
+    int isStopping() const;
+
     /***
      * Loop function.
      *
@@ -36,7 +34,8 @@ protected:
     virtual void run() = 0;
 
 private:
-    void* _rateThreadHelperPtr;
+    int _intervalPeriodMillis;
+    bool _isStopping;
     std::thread* _threadPtr;
 };
 
