@@ -45,7 +45,6 @@ private:
     std::thread* _threadPtr;
 };
 
-
 }  // namespace ratethread
 
 #endif // __RATE_THREAD_HPP__
