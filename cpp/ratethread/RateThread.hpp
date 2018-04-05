@@ -2,6 +2,9 @@
 // CopyPolicy: released under the terms of the LGPLv2.1
 // URL: https://github.com/jgvictores/snippets
 
+#ifndef __RATE_THREAD_HPP__
+#define __RATE_THREAD_HPP__
+
 #include <thread>
 
 namespace ratethread
@@ -44,3 +47,5 @@ private:
 
 
 }  // namespace ratethread
+
+#endif // __RATE_THREAD_HPP__
