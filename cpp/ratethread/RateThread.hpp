@@ -23,7 +23,7 @@ public:
     int getRate() const;
 
     /// Return if is stopping.
-    int isStopping() const;
+    bool isStopping() const;
 
 protected:
     /***

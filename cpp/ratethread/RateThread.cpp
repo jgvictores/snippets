@@ -44,7 +44,7 @@ int RateThread::getRate() const
     return _intervalPeriodMillis;
 }
 
-int RateThread::isStopping() const
+bool RateThread::isStopping() const
 {
     return _isStopping;
 }
