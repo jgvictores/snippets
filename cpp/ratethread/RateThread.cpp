@@ -12,8 +12,9 @@ namespace ratethread
 {
 
 RateThread::RateThread(const int intervalPeriodMillis) :
-     _isStopping(false),
-    _intervalPeriodMillis(intervalPeriodMillis)
+    _intervalPeriodMillis(intervalPeriodMillis),
+    _isStopping(false),
+    _threadPtr(nullptr)
 {
 }
 
@@ -24,6 +25,8 @@ RateThread::~RateThread()
 
 void RateThread::start()
 {
+    if( !! _threadPtr )  // Avoid calling more than once
+        return;
     _threadPtr = new std::thread( RateThread::threadFunction, this );
     //std::cout<<"[RateThread] Created new thread..." << std::endl;
 }
