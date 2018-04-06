@@ -22,6 +22,9 @@ public:
     /// Call this to stop the thread, this call blocks until the thread is terminated
     void stop();
 
+    /// Set the rate of the thread [ms].
+    void setRate(const int);
+
     /// Return the current rate of the thread [ms].
     int getRate() const;
 

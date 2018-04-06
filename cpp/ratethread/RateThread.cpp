@@ -42,6 +42,11 @@ void RateThread::stop()
     _threadPtr = nullptr;
 }
 
+void RateThread::setRate(const int intervalPeriodMillis)
+{
+    _intervalPeriodMillis = intervalPeriodMillis;
+}
+
 int RateThread::getRate() const
 {
     return _intervalPeriodMillis;
