@@ -14,4 +14,4 @@ grep -i "just" *.tex # sed: only
 
 # 
 grep -i "problem" *.tex # sed: issue, challenge
-
+grep -i "get" *.tex # sed: obtain
