@@ -15,3 +15,6 @@ grep -i "just" *.tex # sed: only
 # 
 grep -i "problem" *.tex # sed: issue, challenge
 grep -i "get" *.tex # sed: obtain
+
+#
+grep -i "implementation" *.tex  # sed: omit (unless you're in the Experimental section)
