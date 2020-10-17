@@ -1,19 +1,11 @@
-cmake_minimum_required(VERSION 2.8.0)
+cmake_minimum_required(VERSION 3.12)
 
-# Start a project.
 project(exampleDepthImageRead)
 
-find_package(YARP REQUIRED COMPONENTS os sig)
-
-# Set up our main executables.
+find_package(YARP 3.3 REQUIRED COMPONENTS os sig)
 
 add_executable(exampleDepthImageRead exampleDepthImageRead.cpp)
 
-target_link_libraries(exampleDepthImageRead YARP::YARP_OS
+target_link_libraries(exampleDepthImageRead YARP::YARP_os
                                   YARP::YARP_init
                                   YARP::YARP_sig)
-
-include(GNUInstallDirs)
-
-install(TARGETS exampleDepthImageRead
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
