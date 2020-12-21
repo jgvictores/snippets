@@ -1,7 +1,6 @@
 // thanks: bullet3/examples/RobotSimulator/RobotSimulatorMain.cpp
 
 #include <RobotSimulator/b3RobotSimulatorClientAPI.h>
-//#include "b3RobotSimulatorClientAPI.h"
 
 #include <unistd.h>
 
