@@ -4,10 +4,10 @@ project(exampleBullet LANGUAGES CXX)
 
 find_package(Bullet REQUIRED)
 
-SET(RobotSimulator_SRCS RobotSimulator/b3RobotSimulatorClientAPI.cpp)
+add_executable(exampleBullet main.cpp b3RobotSimulatorClientAPI.cpp)
 
-add_executable(exampleBullet main.cpp ${RobotSimulator_SRCS})
 include_directories(${BULLET_INCLUDE_DIRS})
+
 #target_link_libraries(myexe ${BULLET_LIBRARIES})
 target_link_libraries(exampleBullet
                       BulletExampleBrowserLib

@@ -1,4 +1,6 @@
-//j//#include "b3RobotSimulatorClientAPI.h"
+// Adapted from:
+// - <https://github.com/bulletphysics/bullet3/tree/master/examples/RobotSimulator>
+// - <https://github.com/bulletphysics/bullet3/tree/b1f76960ff630969050f90784b1f254ad6a7ded8/examples/RobotSimulator>
 
 #include <RobotSimulator/b3RobotSimulatorClientAPI.h>
 
