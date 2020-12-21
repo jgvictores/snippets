@@ -15,8 +15,6 @@ target_link_libraries(exampleBullet
                       BulletExampleBrowserLib
                       BulletInverseDynamicsUtils
                       BulletInverseDynamics
-                      OpenGLWindow
-                      BussIK
                       Bullet3Common
                       BulletRobotics
                       BulletRoboticsGUI)
