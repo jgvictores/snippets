@@ -1,9 +1,24 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 
-project(bulletExample LANGUAGES CXX)
+project(exampleBullet LANGUAGES CXX)
 
 find_package(Bullet REQUIRED)
 
-include_directories(${BULLET_INCLUDE_DIR})
-add_executable(main main.cpp)
-target_link_libraries(main ${BULLET_LIBRARIES})
+SET(RobotSimulator_SRCS RobotSimulator/b3RobotSimulatorClientAPI.cpp)
+
+add_executable(exampleBullet main.cpp ${RobotSimulator_SRCS})
+include_directories(${BULLET_INCLUDE_DIRS})
+#target_link_libraries(myexe ${BULLET_LIBRARIES})
+target_link_libraries(exampleBullet
+                      BulletExampleBrowserLib
+                      BulletSoftBody
+                      BulletInverseDynamicsUtils
+                      BulletInverseDynamics
+                      OpenGLWindow
+                      BussIK
+                      BulletDynamics
+                      BulletCollision
+                      LinearMath
+                      Bullet3Common
+                      BulletRobotics
+                      BulletRoboticsGUI)
