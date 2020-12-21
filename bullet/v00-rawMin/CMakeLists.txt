@@ -8,17 +8,15 @@ add_executable(exampleBullet main.cpp b3RobotSimulatorClientAPI.cpp)
 
 include_directories(${BULLET_INCLUDE_DIRS})
 
-#target_link_libraries(myexe ${BULLET_LIBRARIES})
+#message(${BULLET_LIBRARIES}) # BulletDynamics BulletCollision LinearMath BulletSoftBody
+
 target_link_libraries(exampleBullet
+                      ${BULLET_LIBRARIES}
                       BulletExampleBrowserLib
-                      BulletSoftBody
                       BulletInverseDynamicsUtils
                       BulletInverseDynamics
                       OpenGLWindow
                       BussIK
-                      BulletDynamics
-                      BulletCollision
-                      LinearMath
                       Bullet3Common
                       BulletRobotics
                       BulletRoboticsGUI)
