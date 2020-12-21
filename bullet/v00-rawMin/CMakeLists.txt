@@ -12,7 +12,6 @@ include_directories(${BULLET_INCLUDE_DIRS})
 
 target_link_libraries(exampleBullet
                       ${BULLET_LIBRARIES}
-                      BulletExampleBrowserLib
                       Bullet3Common
                       BulletRobotics
                       BulletRoboticsGUI)
