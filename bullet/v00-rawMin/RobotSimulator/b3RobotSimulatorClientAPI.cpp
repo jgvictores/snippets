@@ -1,24 +1,26 @@
-#include "b3RobotSimulatorClientAPI.h"
+//j//#include "b3RobotSimulatorClientAPI.h"
 
-#include "../SharedMemory/PhysicsClientC_API.h"
-#include "../SharedMemory/b3RobotSimulatorClientAPI_InternalData.h"
+#include <RobotSimulator/b3RobotSimulatorClientAPI.h>
+
+#include <SharedMemory/PhysicsClientC_API.h>
+#include <SharedMemory/b3RobotSimulatorClientAPI_InternalData.h>
 #ifdef BT_ENABLE_ENET
-#include "../SharedMemory/PhysicsClientUDP_C_API.h"
+#include <SharedMemory/PhysicsClientUDP_C_API.h>
 #endif  //PHYSICS_UDP
 
 #ifdef BT_ENABLE_CLSOCKET
-#include "../SharedMemory/PhysicsClientTCP_C_API.h"
+#include <SharedMemory/PhysicsClientTCP_C_API.h>
 #endif  //PHYSICS_TCP
 
-#include "../SharedMemory/PhysicsDirectC_API.h"
+#include <SharedMemory/PhysicsDirectC_API.h>
 
-#include "../SharedMemory/SharedMemoryInProcessPhysicsC_API.h"
+#include <SharedMemory/SharedMemoryInProcessPhysicsC_API.h>
 
-#include "../SharedMemory/SharedMemoryPublic.h"
-#include "Bullet3Common/b3Logging.h"
+#include <SharedMemory/SharedMemoryPublic.h>
+#include <Bullet3Common/b3Logging.h>
 
 #ifdef BT_ENABLE_GRPC
-#include "../SharedMemory/PhysicsClientGRPC_C_API.h"
+#include <SharedMemory/PhysicsClientGRPC_C_API.h>
 #endif
 
 b3RobotSimulatorClientAPI::b3RobotSimulatorClientAPI()
