@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     printf("planeUid = %d\n", planeUid);
     if(-1 == planeUid)
     {
-        printf("Fail: open TEO.urdf\n");
+        printf("Fail: open plane.urdf\n");
         delete sim;
         return 1;
     }
