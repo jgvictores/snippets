@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
         printf("Fail: connect.\n");
         return 1;
     }
-    sim->configureDebugVisualizer(COV_ENABLE_GUI, 0);
+    //sim->configureDebugVisualizer(COV_ENABLE_GUI, 0);
     sim->setTimeStep(1./500);
     sim->setGravity(btVector3(0, 0, -9.8));
 
